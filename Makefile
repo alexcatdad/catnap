@@ -4,7 +4,7 @@ APP_BUNDLE = $(APP_NAME).app
 CONTENTS = $(APP_BUNDLE)/Contents
 MACOS = $(CONTENTS)/MacOS
 
-.PHONY: build bundle codesign run clean
+.PHONY: build bundle codesign run clean test lint
 
 build:
 	swift build -c release
@@ -19,6 +19,12 @@ codesign: bundle
 
 run: codesign
 	open $(APP_BUNDLE)
+
+test:
+	swift test
+
+lint:
+	swift build -Xswiftc -warnings-as-errors
 
 clean:
 	rm -rf .build $(APP_BUNDLE)

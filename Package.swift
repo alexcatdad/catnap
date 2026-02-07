@@ -8,6 +8,11 @@ let package = Package(
         .executableTarget(
             name: "Catnap",
             path: "Sources"
+        ),
+        .testTarget(
+            name: "CatnapTests",
+            dependencies: ["Catnap"],
+            path: "Tests"
         )
     ]
 )

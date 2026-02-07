@@ -21,6 +21,7 @@
     --accent: #c4a882;
     --green: #6bc46d;
     --gold: #d4a843;
+    --warn: #d4a843;
     --border: rgba(255,255,255,0.06);
   }
 
@@ -40,9 +41,29 @@
     padding: 0 24px;
   }
 
+  /* ─── Notice ─── */
+  .notice {
+    padding: 20px 0 0;
+  }
+
+  .notice-box {
+    background: rgba(212,168,67,0.06);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .notice-box strong {
+    color: var(--warn);
+    font-weight: 600;
+  }
+
   /* ─── Hero ─── */
   .hero {
-    padding: 80px 0 48px;
+    padding: 60px 0 48px;
     text-align: center;
   }
 
@@ -227,6 +248,49 @@
     color: var(--text-3);
   }
 
+  /* ─── Prerequisites ─── */
+  .prereqs {
+    padding: 0 0 64px;
+    text-align: center;
+  }
+
+  .prereqs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .prereq {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: left;
+  }
+
+  .prereq .name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .prereq .desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.5;
+  }
+
+  .prereq .optional {
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
   /* ─── Views ─── */
   .views {
     padding: 64px 0;
@@ -266,6 +330,107 @@
     color: var(--text-3);
     letter-spacing: 0.5px;
     text-transform: uppercase;
+  }
+
+  /* ─── Fork ─── */
+  .fork {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .fork h2 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .fork .subtitle {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 32px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .fork-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .fork-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .fork-step .num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .fork-step .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .fork-step .desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.5;
+  }
+
+  /* ─── Security ─── */
+  .security {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .security h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .security-item {
+    padding: 20px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .security-item h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .security-item p {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
   }
 
   /* ─── Stack ─── */
@@ -316,10 +481,19 @@
     .hero { padding: 48px 0 32px; }
     .hero h1 { font-size: 32px; }
     .views-grid { grid-template-columns: 1fr; }
+    .fork-steps { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
+
+<section class="notice">
+  <div class="container">
+    <div class="notice-box">
+      <strong>Personal project.</strong> I built this because I have too many repos and kept losing track of what's active. Maintenance will be sporadic &mdash; I fix things when I need them. Contributions are welcome but response times may vary.
+    </div>
+  </div>
+</section>
 
 <section class="hero">
   <div class="container">
@@ -328,7 +502,7 @@
     <p>A native macOS menubar dashboard that scans your local git repos and shows live status with GitHub enrichment.</p>
     <div class="hero-actions">
       <a href="https://github.com/alexcatdad/catnap" class="btn btn-primary">View on GitHub</a>
-      <a href="https://github.com/alexcatdad/catnap/releases" class="btn btn-secondary">Releases</a>
+      <a href="https://github.com/alexcatdad/catnap/fork" class="btn btn-secondary">Fork It</a>
     </div>
   </div>
 </section>
@@ -400,12 +574,96 @@
 <section class="install">
   <div class="container">
     <h2>Get Started</h2>
-    <p class="subtitle">Requires macOS 14+ and Swift 6.</p>
+    <p class="subtitle">Clone, build, done. No dependencies to install.</p>
     <div class="code-block">
       <span class="comment"># clone and run</span><br>
       <span class="cmd">git clone https://github.com/alexcatdad/catnap.git</span><br>
       <span class="cmd">cd catnap</span><br>
       <span class="cmd">make run</span>
+    </div>
+  </div>
+</section>
+
+<section class="prereqs">
+  <div class="container">
+    <div class="prereqs-grid">
+      <div class="prereq">
+        <div class="name">macOS 14+ (Sonoma)</div>
+        <div class="desc">MenuBarExtra .window style and Observation framework</div>
+      </div>
+      <div class="prereq">
+        <div class="name">Swift 6</div>
+        <div class="desc">Comes with Xcode 16+ or CLI tools</div>
+      </div>
+      <div class="prereq">
+        <div class="name">git</div>
+        <div class="desc">Ships with macOS. Used for repo scanning.</div>
+      </div>
+      <div class="prereq">
+        <div class="name">gh CLI <span class="optional">optional</span></div>
+        <div class="desc">For GitHub descriptions. Install via <code>brew install gh</code></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fork">
+  <div class="container">
+    <h2>Make It Yours</h2>
+    <p class="subtitle">Designed to be forked and personalized. No external Swift dependencies to worry about.</p>
+    <div class="fork-steps">
+      <div class="fork-step">
+        <div class="num">01</div>
+        <div class="label">Fork &amp; clone</div>
+        <div class="desc">Fork on GitHub, clone your copy locally</div>
+      </div>
+      <div class="fork-step">
+        <div class="num">02</div>
+        <div class="label">Edit config</div>
+        <div class="desc">Set your scanPath and githubOwner in config.json</div>
+      </div>
+      <div class="fork-step">
+        <div class="num">03</div>
+        <div class="label">Define categories</div>
+        <div class="desc">Group your repos however makes sense for your workflow</div>
+      </div>
+      <div class="fork-step">
+        <div class="num">04</div>
+        <div class="label">make run</div>
+        <div class="desc">Build, bundle, and launch. That's it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="security">
+  <div class="container">
+    <h2>Security</h2>
+    <div class="security-grid">
+      <div class="security-item">
+        <h3>No network access</h3>
+        <p>The app never makes HTTP requests. GitHub data is fetched by shelling out to <code>gh</code>, which handles its own auth.</p>
+      </div>
+      <div class="security-item">
+        <h3>No sandbox</h3>
+        <p>Runs with ad-hoc codesign, no App Sandbox. Needs filesystem access to scan repos and execute git/gh.</p>
+      </div>
+      <div class="security-item">
+        <h3>Safe shell execution</h3>
+        <p>Arguments passed as arrays via Foundation.Process, not string interpolation. No shell injection vectors.</p>
+      </div>
+      <div class="security-item">
+        <h3>No secrets stored</h3>
+        <p>Config contains only paths, repo names, and cached descriptions. No tokens, passwords, or credentials.</p>
+      </div>
+      <div class="security-item">
+        <h3>No telemetry</h3>
+        <p>No analytics, crash reporting, or phoning home. Runs entirely offline except for gh CLI calls.</p>
+      </div>
+      <div class="security-item">
+        <h3>Report issues</h3>
+        <p>Found a vulnerability? Open a GitHub issue or reach out directly. Please avoid public disclosure until patched.</p>
+      </div>
     </div>
   </div>
 </section>

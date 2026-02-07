@@ -1,0 +1,6 @@
+.build/
+Catnap.app/
+.swiftpm/
+design-mockup.html
+scripts/
+node_modules/

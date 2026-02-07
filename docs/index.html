@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catnap — macOS Menubar Repo Dashboard</title>
+<meta name="description" content="A native macOS menubar app that shows live git repo status with GitHub enrichment.">
+<meta property="og:title" content="Catnap">
+<meta property="og:description" content="macOS menubar dashboard for local git repos — live status, GitHub enrichment, zero config.">
+<meta property="og:image" content="hero.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #1a1a1e;
+    --text: #e8e6e3;
+    --text-2: #8e8c88;
+    --text-3: #5a5854;
+    --accent: #c4a882;
+    --green: #6bc46d;
+    --gold: #d4a843;
+    --border: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    padding: 80px 0 48px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(196,168,130,0.08);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(196,168,130,0.15);
+    margin-bottom: 24px;
+    letter-spacing: 0.3px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--text-2);
+    max-width: 520px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: #d4b892;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(196,168,130,0.3);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: #222226;
+    border-color: rgba(255,255,255,0.1);
+  }
+
+  /* ─── Screenshot ─── */
+  .screenshot {
+    padding: 24px 0 64px;
+    text-align: center;
+  }
+
+  .screenshot img {
+    max-width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+  }
+
+  /* ─── Features ─── */
+  .features {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .features h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    padding: 24px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .feature-icon {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .feature-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  /* ─── Install ─── */
+  .install {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .install h2 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .install .subtitle {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 32px;
+  }
+
+  .code-block {
+    display: inline-block;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 2;
+  }
+
+  .code-block .cmd {
+    color: var(--text);
+  }
+
+  .code-block .comment {
+    color: var(--text-3);
+  }
+
+  /* ─── Views ─── */
+  .views {
+    padding: 64px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .views h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .views-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .view-card {
+    text-align: center;
+  }
+
+  .view-card img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 12px;
+  }
+
+  .view-card .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ─── Stack ─── */
+  .stack {
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stack-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 0 32px; }
+    .hero h1 { font-size: 32px; }
+    .views-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Swift 6 &middot; SwiftUI &middot; macOS 14+</div>
+    <h1><span>Catnap</span></h1>
+    <p>A native macOS menubar dashboard that scans your local git repos and shows live status with GitHub enrichment.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/alexcatdad/catnap" class="btn btn-primary">View on GitHub</a>
+      <a href="https://github.com/alexcatdad/catnap/releases" class="btn btn-secondary">Releases</a>
+    </div>
+  </div>
+</section>
+
+<section class="screenshot">
+  <div class="container">
+    <img src="hero.png" alt="Catnap showing compact, expanded, and loading states" loading="lazy">
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F4CB;</div>
+        <h3>Live Repo Status</h3>
+        <p>Scans your repos directory and shows status dots, dirty indicators, and relative timestamps at a glance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x2328;&#xFE0F;</div>
+        <h3>Option+Click</h3>
+        <p>Hold Option while clicking for expanded view with GitHub descriptions pulled via the <code>gh</code> CLI.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F4C1;</div>
+        <h3>Category Groups</h3>
+        <p>Organize repos into collapsible categories. Collapse state persists across sessions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F504;</div>
+        <h3>Background Polling</h3>
+        <p>Configurable refresh interval keeps your dashboard up to date without manual intervention.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x26A1;</div>
+        <h3>Lightweight</h3>
+        <p>~3 MB binary, ~15 MB RAM. Native Swift with no webview, no Electron, no runtime overhead.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#x2699;&#xFE0F;</div>
+        <h3>Configurable</h3>
+        <p>JSON config for scan path, GitHub owner, active/stale thresholds, categories, and refresh interval.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="views">
+  <div class="container">
+    <h2>Views</h2>
+    <div class="views-grid">
+      <div class="view-card">
+        <img src="compact.png" alt="Compact view" loading="lazy">
+        <span class="label">Click &mdash; Compact</span>
+      </div>
+      <div class="view-card">
+        <img src="expanded.png" alt="Expanded view" loading="lazy">
+        <span class="label">Option+Click &mdash; Expanded</span>
+      </div>
+      <div class="view-card">
+        <img src="loading.png" alt="Loading state" loading="lazy">
+        <span class="label">Loading State</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="install">
+  <div class="container">
+    <h2>Get Started</h2>
+    <p class="subtitle">Requires macOS 14+ and Swift 6.</p>
+    <div class="code-block">
+      <span class="comment"># clone and run</span><br>
+      <span class="cmd">git clone https://github.com/alexcatdad/catnap.git</span><br>
+      <span class="cmd">cd catnap</span><br>
+      <span class="cmd">make run</span>
+    </div>
+  </div>
+</section>
+
+<section class="stack">
+  <div class="container">
+    <div class="stack-pills">
+      <span class="pill">Swift 6</span>
+      <span class="pill">SwiftUI</span>
+      <span class="pill">MenuBarExtra</span>
+      <span class="pill">Observation</span>
+      <span class="pill">SPM</span>
+      <span class="pill">Foundation Process</span>
+      <span class="pill">gh CLI</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built by <a href="https://github.com/alexcatdad">alexcatdad</a> &middot; MIT License</p>
+  </div>
+</footer>
+
+</body>
+</html>

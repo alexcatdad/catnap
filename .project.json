@@ -1,0 +1,8 @@
+{
+  "$schema": "https://alexcatdad.github.io/schemas/project-meta.schema.json",
+  "what": "macOS menubar dashboard for local git repos with live status and GitHub enrichment.",
+  "why": "Built to manage many personal and work repos from a single glanceable UI.",
+  "tags": ["swift", "swiftui", "macos", "git", "menubar-app"],
+  "featured": true,
+  "order": 15
+}

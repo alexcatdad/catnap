@@ -37,12 +37,16 @@ The app uses absolute paths to binaries since `.app` bundles don't inherit shell
 ## Install
 
 ```bash
+brew install --cask alexcatdad/tap/catnap
+```
+
+Or build from source:
+
+```bash
 git clone https://github.com/alexcatdad/catnap.git
 cd catnap
 make run
 ```
-
-This builds the Swift package, assembles a `.app` bundle with `Info.plist`, ad-hoc codesigns it, and opens it. A cat icon appears in your menubar.
 
 ### Make Targets
 

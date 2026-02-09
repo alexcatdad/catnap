@@ -22,9 +22,14 @@ final class AppState {
     }
 
     var statusCounts: (active: Int, inProgress: Int, stale: Int) {
-        let a = repos.filter { $0.status == .active }.count
-        let p = repos.filter { $0.status == .inProgress }.count
-        let s = repos.filter { $0.status == .stale }.count
+        var a = 0, p = 0, s = 0
+        for repo in repos {
+            switch repo.status {
+            case .active: a += 1
+            case .inProgress: p += 1
+            case .stale: s += 1
+            }
+        }
         return (a, p, s)
     }
 
@@ -50,8 +55,12 @@ final class AppState {
             let owner = config.githubOwner
 
             var scanned: [RepoInfo] = []
+            let maxConcurrent = 8
             await withTaskGroup(of: RepoInfo?.self) { group in
-                for path in repoPaths {
+                for (i, path) in repoPaths.enumerated() {
+                    if i >= maxConcurrent, let repo = await group.next().flatMap({ $0 }) {
+                        scanned.append(repo)
+                    }
                     group.addTask {
                         let name = URL(fileURLWithPath: path).lastPathComponent
                         guard let git = await GitScanner.scan(repoPath: path) else { return nil }
@@ -118,11 +127,8 @@ final class AppState {
             cached: descriptions
         )
         self.descriptions = enriched
-        // Update existing repos with descriptions
-        self.repos = repos.map { repo in
-            var updated = repo
-            updated.description = enriched[repo.name]
-            return updated
+        for i in repos.indices {
+            repos[i].description = enriched[repos[i].name]
         }
         GitHubEnricher.saveCache(enriched)
     }

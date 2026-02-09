@@ -3,6 +3,7 @@ import SwiftUI
 struct RepoListView: View {
     @Environment(AppState.self) var state
     @State private var showSettings = false
+    @State private var refreshTask: Task<Void, Never>?
 
     private var showSkeleton: Bool {
         state.isLoading && state.repos.isEmpty
@@ -41,7 +42,8 @@ struct RepoListView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
             let optionHeld = NSEvent.modifierFlags.contains(.option)
             state.isExpanded = optionHeld
-            Task {
+            refreshTask?.cancel()
+            refreshTask = Task {
                 await state.refresh()
                 if optionHeld {
                     await state.enrichDescriptions()

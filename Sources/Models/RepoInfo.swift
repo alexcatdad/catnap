@@ -1,5 +1,11 @@
 import Foundation
 
+nonisolated(unsafe) private let relativeFormatter: RelativeDateTimeFormatter = {
+    let f = RelativeDateTimeFormatter()
+    f.unitsStyle = .abbreviated
+    return f
+}()
+
 struct RepoInfo: Identifiable, Sendable {
     let id: String  // repo name
     let name: String
@@ -17,8 +23,6 @@ struct RepoInfo: Identifiable, Sendable {
     }
 
     var relativeTime: String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        return formatter.localizedString(for: lastCommitDate, relativeTo: Date())
+        relativeFormatter.localizedString(for: lastCommitDate, relativeTo: Date())
     }
 }

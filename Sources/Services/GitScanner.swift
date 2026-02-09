@@ -1,6 +1,7 @@
 import Foundation
 
 private let git = "/usr/bin/git"
+nonisolated(unsafe) private let isoFormatter = ISO8601DateFormatter()
 
 /// Discovers git repos in a directory and extracts status info from each.
 enum GitScanner {
@@ -41,7 +42,7 @@ enum GitScanner {
                 git, arguments: ["log", "-1", "--format=%aI"], workingDirectory: path
             )
             guard !output.isEmpty else { return nil }
-            return ISO8601DateFormatter().date(from: output)
+            return isoFormatter.date(from: output)
         } catch {
             print("[GitScanner] lastCommitDate failed for \(path): \(error)")
             return nil

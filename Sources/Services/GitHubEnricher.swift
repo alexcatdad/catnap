@@ -21,10 +21,17 @@ enum GitHubEnricher {
         var cache = loadRawCache()
         let cutoff = Date().addingTimeInterval(-86400)  // 24h
 
+        let staleNames = repoNames.filter { name in
+            guard let entry = cache[name] else { return true }
+            return entry.fetchedAt <= cutoff
+        }
+        let maxConcurrent = 8
         await withTaskGroup(of: (String, String?).self) { group in
-            for name in repoNames {
-                if let entry = cache[name], entry.fetchedAt > cutoff {
-                    continue  // still fresh
+            for (i, name) in staleNames.enumerated() {
+                if i >= maxConcurrent {
+                    if let (n, d) = await group.next(), let d {
+                        cache[n] = CacheEntry(description: d, fetchedAt: Date())
+                    }
                 }
                 group.addTask {
                     let desc = await fetchDescription(owner: owner, repo: name)

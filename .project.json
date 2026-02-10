@@ -1,0 +1,12 @@
+{
+  "what": "macOS menubar dashboard for monitoring local git repositories with GitHub enrichment.",
+  "why": "Built to track repo activity and status at a glance across many concurrent projects.",
+  "tags": [
+    "macos",
+    "git",
+    "dashboard",
+    "menubar"
+  ],
+  "featured": false,
+  "order": 50
+}
